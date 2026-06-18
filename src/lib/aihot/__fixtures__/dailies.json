@@ -1,0 +1,23 @@
+{
+  "count": 3,
+  "items": [
+    {
+      "date": "2026-06-01",
+      "generatedAt": "2026-06-01T00:02:29.514Z",
+      "leadTitle": "OpenAI发布生物防御AI工具Rosalind",
+      "leadParagraph": null
+    },
+    {
+      "date": "2026-05-31",
+      "generatedAt": "2026-05-31T00:00:15.569Z",
+      "leadTitle": "Nano Banana Pro与Nano Banana 2正式发布",
+      "leadParagraph": null
+    },
+    {
+      "date": "2026-05-30",
+      "generatedAt": "2026-05-30T00:00:00.090Z",
+      "leadTitle": "OpenAI推出实时翻译模型，支持70+语言输入",
+      "leadParagraph": null
+    }
+  ]
+}

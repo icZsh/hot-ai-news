@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ExternalItem {
+  id               String    @id @default(cuid())
+  sourceSystem     String
+  externalId       String
+  canonicalUrl     String
+  canonicalUrlHash String    @unique
+  title            String
+  titleEn          String?
+  summary          String?
+  sourceName       String
+  publishedAt      DateTime?
+  fetchedAt        DateTime
+  category         String?
+  tags             String[]  @default([])
+  selected         Boolean   @default(false)
+  selectedReason   String?
+  raw              Json
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@unique([sourceSystem, externalId])
+  @@index([sourceSystem, selected, publishedAt])
+  @@index([category])
+}
+
+model DailyReport {
+  id            String            @id @default(cuid())
+  sourceSystem  String
+  sourceDate    String
+  localDate     String
+  timezone      String
+  generatedAt   DateTime?
+  windowStart   DateTime?
+  windowEnd     DateTime?
+  leadTitle     String?
+  leadParagraph String?
+  raw           Json
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  items         DailyReportItem[]
+
+  @@unique([sourceSystem, sourceDate])
+  @@unique([sourceSystem, localDate])
+  @@index([localDate])
+}
+
+model DailyReportItem {
+  id                   String      @id @default(cuid())
+  dailyReportId        String
+  sectionLabel         String
+  title                String
+  summary              String?
+  sourceName           String?
+  sourceUrl            String
+  sortOrder            Int
+  linkedExternalItemId String?
+  raw                  Json
+  dailyReport          DailyReport @relation(fields: [dailyReportId], references: [id], onDelete: Cascade)
+
+  @@index([dailyReportId, sortOrder])
+  @@index([sourceUrl])
+}
+
+model Bookmark {
+  id           String   @id @default(cuid())
+  targetType   String
+  targetId     String
+  status       String   @default("unread")
+  personalTags String[] @default([])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([targetType, targetId])
+  @@index([status])
+}
+
+model Note {
+  id         String   @id @default(cuid())
+  targetType String
+  targetId   String
+  content    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([targetType, targetId])
+}
+
+model FetchLog {
+  id           String    @id @default(cuid())
+  jobName      String
+  sourceSystem String
+  status       String
+  startedAt    DateTime
+  finishedAt   DateTime?
+  itemCount    Int       @default(0)
+  errorMessage String?
+  metadata     Json?
+
+  @@index([jobName, startedAt])
+  @@index([sourceSystem, status])
+}
+
+model ApiCache {
+  key       String   @id
+  value     Json
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([expiresAt])
+}

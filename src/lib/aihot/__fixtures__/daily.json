@@ -1,0 +1,38 @@
+{
+  "date": "2026-06-01",
+  "generatedAt": "2026-06-01T00:02:29.514Z",
+  "windowStart": "2026-05-31T00:00:00.000Z",
+  "windowEnd": "2026-06-01T00:00:00.000Z",
+  "lead": null,
+  "sections": [
+    {
+      "label": "产品发布/更新",
+      "items": [
+        {
+          "title": "OpenAI发布生物防御AI工具Rosalind",
+          "summary": "我们希望帮助世界在生物防御领域抢占先机。",
+          "sourceUrl": "https://x.com/sama/status/2061101875303530871",
+          "sourceName": "X：Sam Altman (@sama)"
+        },
+        {
+          "title": "DeepSeek V4 Flash 已上线 OpenCode Zen",
+          "summary": "DeepSeek V4 Flash 现已在 OpenCode Zen 上线。",
+          "sourceUrl": "https://x.com/opencode/status/2061153857321775209",
+          "sourceName": "X：opencode (@opencode)"
+        }
+      ]
+    },
+    {
+      "label": "行业动态",
+      "items": [
+        {
+          "title": "OpenAI正式进军机器人领域并启动招聘",
+          "summary": "OpenAI宣布成立OpenAI Robotics团队，并开始招聘硬件、系统及ML工程师。",
+          "sourceUrl": "https://x.com/sama/status/2061117302528188712",
+          "sourceName": "X：Sam Altman (@sama)"
+        }
+      ]
+    }
+  ],
+  "flashes": []
+}

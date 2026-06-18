@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: hot_ai_news
+      POSTGRES_USER: hot_ai_news
+      POSTGRES_PASSWORD: hot_ai_news
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hot_ai_news -d hot_ai_news"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  migrate:
+    build:
+      context: .
+      target: tools
+    environment:
+      DATABASE_URL: postgresql://hot_ai_news:hot_ai_news@postgres:5432/hot_ai_news?schema=public
+    command: ["npx", "prisma", "db", "push"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  web:
+    environment:
+      DATABASE_URL: postgresql://hot_ai_news:hot_ai_news@postgres:5432/hot_ai_news?schema=public
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+volumes:
+  postgres-data:

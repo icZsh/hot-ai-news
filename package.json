@@ -1,0 +1,40 @@
+{
+  "name": "hot-ai-news",
+  "version": "0.1.0",
+  "description": "A personal AI news radar built with Next.js, AI HOT, and optional Postgres persistence.",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "dev": "next dev --port 3100",
+    "build": "next build",
+    "start": "next start",
+    "docker:build": "docker build -t hot-ai-news .",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "@tailwindcss/postcss": "^4.3.0",
+    "lucide-react": "^1.17.0",
+    "next": "^16.2.6",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "zod": "^4.2.2"
+  },
+  "overrides": {
+    "postcss": "^8.5.15"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9.39.1",
+    "eslint-config-next": "^16.2.6",
+    "prisma": "^6.19.3",
+    "typescript": "^6.0.3",
+    "vitest": "^4.0.14"
+  }
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "openai-blog",
+    "name": "OpenAI Blog",
+    "kind": "rss",
+    "url": "https://openai.com/news/rss.xml",
+    "homepage": "https://openai.com/news/",
+    "enabled": true,
+    "categoryHint": "ai-models",
+    "fetchIntervalMinutes": 60
+  },
+  {
+    "id": "anthropic-news",
+    "name": "Anthropic News",
+    "kind": "rss",
+    "url": "https://www.anthropic.com/news/rss.xml",
+    "homepage": "https://www.anthropic.com/news",
+    "enabled": true,
+    "categoryHint": "ai-models",
+    "fetchIntervalMinutes": 60
+  },
+  {
+    "id": "google-ai-blog",
+    "name": "Google AI Blog",
+    "kind": "rss",
+    "url": "https://blog.google/technology/ai/rss/",
+    "homepage": "https://blog.google/technology/ai/",
+    "enabled": true,
+    "categoryHint": "industry",
+    "fetchIntervalMinutes": 120
+  },
+  {
+    "id": "nvidia-technical-blog",
+    "name": "NVIDIA Technical Blog",
+    "kind": "rss",
+    "url": "https://developer.nvidia.com/blog/feed/",
+    "homepage": "https://developer.nvidia.com/blog/",
+    "enabled": true,
+    "categoryHint": "tip",
+    "fetchIntervalMinutes": 120
+  },
+  {
+    "id": "huggingface-blog",
+    "name": "Hugging Face Blog",
+    "kind": "rss",
+    "url": "https://huggingface.co/blog/feed.xml",
+    "homepage": "https://huggingface.co/blog",
+    "enabled": true,
+    "categoryHint": "ai-products",
+    "fetchIntervalMinutes": 120
+  },
+  {
+    "id": "arxiv-cs-cl",
+    "name": "arXiv cs.CL",
+    "kind": "rss",
+    "url": "https://rss.arxiv.org/rss/cs.CL",
+    "homepage": "https://arxiv.org/list/cs.CL/recent",
+    "enabled": true,
+    "categoryHint": "paper",
+    "fetchIntervalMinutes": 240
+  }
+]

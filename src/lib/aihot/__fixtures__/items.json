@@ -1,0 +1,37 @@
+{
+  "count": 3,
+  "hasNext": true,
+  "nextCursor": "fixture-cursor",
+  "items": [
+    {
+      "id": "cmpurl8qd009dsl0zyghfa9kw",
+      "title": "介绍Cosmos Coalition",
+      "title_en": "Introducing the Cosmos Coalition",
+      "url": "https://runwayml.com/news/introducing-cosmos-coalition",
+      "source": "Runway：News（网页）",
+      "publishedAt": "2026-06-01T05:24:22.746Z",
+      "summary": "Runway宣布作为创始成员加入Cosmos Coalition，该联盟与NVIDIA及多家领先AI实验室合作，旨在构建并开源面向物理AI的前沿世界模型。",
+      "category": "industry"
+    },
+    {
+      "id": "cmpu2kv1z001eslagcgl0irro",
+      "title": "NVIDIA与Google Cloud助力下一波AI构建者",
+      "title_en": "NVIDIA and Google Cloud Empower the Next Wave of AI Builders",
+      "url": "https://blogs.nvidia.com/blog/category/enterprise/cloud-2",
+      "source": "NVIDIA Blog：Generative AI（网页）",
+      "publishedAt": "2026-06-01T05:00:56.000Z",
+      "summary": "NVIDIA与Google Cloud宣布深化合作，支持联合开发者社区构建AI应用。",
+      "category": "industry"
+    },
+    {
+      "id": "cmpuse81v00hrsl0zr2uqw9km",
+      "title": "NVIDIA 发布工厂运营蓝图",
+      "title_en": "NVIDIA Factory Operations Blueprint Gives Factories a New AI Brain",
+      "url": "https://blogs.nvidia.com/blog/factory-operations-fox-blueprint-ai-brain",
+      "source": "NVIDIA Blog：Agentic AI（网页）",
+      "publishedAt": "2026-06-01T05:00:47.000Z",
+      "summary": "NVIDIA 在 GTC Taipei 发布工厂运营蓝图，用于构建自主工厂管理智能体。",
+      "category": "ai-products"
+    }
+  ]
+}
