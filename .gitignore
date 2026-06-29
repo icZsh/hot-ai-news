@@ -10,6 +10,7 @@ coverage/
 
 .vercel/
 .turbo/
+.hermes/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

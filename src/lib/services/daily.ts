@@ -155,5 +155,6 @@ function mapDailyReport(
         sourceUrl: item.sourceUrl,
       })),
     })),
+    flashes: [],
   };
 }

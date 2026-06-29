@@ -1,14 +1,18 @@
 import { ZodError } from "zod";
 import {
+  normalizeAihotVersion,
   normalizeDailyIndex,
   normalizeDailyReport,
+  normalizeHotTopicsResponse,
   normalizeItemsResponse,
 } from "./normalizers";
 import type {
   AdapterResult,
   AihotError,
+  NormalizedAihotVersion,
   NormalizedDailyIndex,
   NormalizedDailyReport,
+  NormalizedHotTopicsResponse,
   NormalizedItemsResponse,
 } from "./types";
 
@@ -27,6 +31,8 @@ type ItemsOptions = FetchOptions & {
   category?: string;
   take?: number;
   cursor?: string;
+  since?: string;
+  q?: string;
 };
 
 const baseUrl = process.env.AIHOT_BASE_URL ?? DEFAULT_BASE_URL;
@@ -45,6 +51,14 @@ export async function fetchSelectedItems(
 
   if (options.cursor) {
     params.set("cursor", options.cursor);
+  }
+
+  if (options.since) {
+    params.set("since", options.since);
+  }
+
+  if (options.q) {
+    params.set("q", options.q);
   }
 
   return fetchAndNormalize(
@@ -81,6 +95,26 @@ export async function fetchDailyIndex(
   return fetchAndNormalize(
     "/api/public/dailies?take=10",
     normalizeDailyIndex,
+    options,
+  );
+}
+
+export async function fetchHotTopics(
+  options: FetchOptions = {},
+): Promise<AdapterResult<NormalizedHotTopicsResponse>> {
+  return fetchAndNormalize(
+    "/api/public/hot-topics",
+    normalizeHotTopicsResponse,
+    options,
+  );
+}
+
+export async function fetchAihotVersion(
+  options: FetchOptions = {},
+): Promise<AdapterResult<NormalizedAihotVersion>> {
+  return fetchAndNormalize(
+    "/api/public/version",
+    normalizeAihotVersion,
     options,
   );
 }

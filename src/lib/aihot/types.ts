@@ -10,10 +10,13 @@ export type NormalizedItem = {
   title: string;
   titleEn?: string;
   url: string;
+  permalink?: string;
   sourceName: string;
   publishedAt?: string;
   summary?: string;
   category?: AihotCategory;
+  score?: number;
+  selected?: boolean;
   raw?: unknown;
 };
 
@@ -33,6 +36,15 @@ export type NormalizedDailyItem = {
   raw?: unknown;
 };
 
+export type NormalizedDailyFlash = {
+  title: string;
+  sourceName?: string;
+  sourceUrl: string;
+  publishedAt?: string;
+  permalink?: string;
+  raw?: unknown;
+};
+
 export type NormalizedDailySection = {
   label: string;
   items: NormalizedDailyItem[];
@@ -48,6 +60,7 @@ export type NormalizedDailyReport = {
   leadTitle?: string;
   leadParagraph?: string;
   sections: NormalizedDailySection[];
+  flashes: NormalizedDailyFlash[];
   fetchedAt: string;
   raw?: unknown;
 };
@@ -64,6 +77,34 @@ export type NormalizedDailyIndex = {
   count: number;
   items: NormalizedDailyIndexItem[];
   fetchedAt: string;
+};
+
+export type NormalizedHotTopic = {
+  id: string;
+  title: string;
+  url: string;
+  permalink: string;
+  sourceName: string;
+  sourceCount: number;
+  sourceNames: string[];
+  latestAt: string;
+  raw?: unknown;
+};
+
+export type NormalizedHotTopicsResponse = {
+  count: number;
+  items: NormalizedHotTopic[];
+  fetchedAt: string;
+};
+
+export type NormalizedAihotVersion = {
+  apiVersion?: string;
+  skillVersion?: string;
+  updatedAt?: string;
+  changelogUrl?: string;
+  recentChanges: string[];
+  fetchedAt: string;
+  raw?: unknown;
 };
 
 export type AdapterResult<T> =

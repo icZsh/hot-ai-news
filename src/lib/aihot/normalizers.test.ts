@@ -27,6 +27,29 @@ describe("AI HOT normalizers", () => {
     });
   });
 
+  it("preserves optional OpenAPI item metadata", () => {
+    const result = normalizeItemsResponse(
+      {
+        ...itemsFixture,
+        items: [
+          {
+            ...itemsFixture.items[0],
+            permalink: "https://aihot.virxact.com/items/cmpurl8qd009dsl0zyghfa9kw",
+            score: 91.5,
+            selected: true,
+          },
+        ],
+      },
+      fetchedAt,
+    );
+
+    expect(result.items[0]).toMatchObject({
+      permalink: "https://aihot.virxact.com/items/cmpurl8qd009dsl0zyghfa9kw",
+      score: 91.5,
+      selected: true,
+    });
+  });
+
   it("keeps sourceDate and derives localDate for daily reports", () => {
     const result = normalizeDailyReport(dailyFixture, fetchedAt);
 
@@ -35,6 +58,33 @@ describe("AI HOT normalizers", () => {
     expect(result.timezone).toBe("America/Los_Angeles");
     expect(result.sections).toHaveLength(2);
     expect(result.sections[0].items[0].sourceName).toContain("Sam Altman");
+  });
+
+  it("preserves daily flashes", () => {
+    const result = normalizeDailyReport(
+      {
+        ...dailyFixture,
+        flashes: [
+          {
+            title: "Claude Code 热度上升",
+            sourceName: "Anthropic",
+            sourceUrl: "https://example.com/claude-code",
+            publishedAt: "2026-06-01T03:00:00.000Z",
+            permalink: "https://aihot.virxact.com/flashes/claude-code",
+          },
+        ],
+      },
+      fetchedAt,
+    );
+
+    expect(result.flashes).toHaveLength(1);
+    expect(result.flashes[0]).toMatchObject({
+      title: "Claude Code 热度上升",
+      sourceName: "Anthropic",
+      sourceUrl: "https://example.com/claude-code",
+      publishedAt: "2026-06-01T03:00:00.000Z",
+      permalink: "https://aihot.virxact.com/flashes/claude-code",
+    });
   });
 
   it("normalizes daily index with local dates", () => {

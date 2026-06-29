@@ -13,10 +13,13 @@ const itemSchema = z.object({
   title: z.string(),
   title_en: z.string().nullish(),
   url: z.string().url(),
+  permalink: z.string().url().nullish(),
   source: z.string(),
   publishedAt: z.string().nullish(),
   summary: z.string().nullish(),
   category: aihotCategorySchema.nullish(),
+  score: z.number().nullish(),
+  selected: z.boolean().nullish(),
 });
 
 export const itemsResponseSchema = z.object({
@@ -31,6 +34,14 @@ const dailyItemSchema = z.object({
   summary: z.string().nullish(),
   sourceUrl: z.string().url(),
   sourceName: z.string().nullish(),
+});
+
+const dailyFlashSchema = z.object({
+  title: z.string(),
+  sourceName: z.string().nullish(),
+  sourceUrl: z.string().url(),
+  publishedAt: z.string().nullish(),
+  permalink: z.string().url().nullish(),
 });
 
 const dailySectionSchema = z.object({
@@ -53,6 +64,7 @@ export const dailyResponseSchema = z.object({
   leadTitle: z.string().nullish(),
   leadParagraph: z.string().nullish(),
   sections: z.array(dailySectionSchema).default([]),
+  flashes: z.array(dailyFlashSchema).default([]),
 });
 
 const dailyIndexItemSchema = z.object({
@@ -65,4 +77,28 @@ const dailyIndexItemSchema = z.object({
 export const dailiesResponseSchema = z.object({
   count: z.number(),
   items: z.array(dailyIndexItemSchema),
+});
+
+const hotTopicSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  url: z.string().url(),
+  permalink: z.string().url(),
+  source: z.string(),
+  sourceCount: z.number(),
+  sourceNames: z.array(z.string()).default([]),
+  latestAt: z.string(),
+});
+
+export const hotTopicsResponseSchema = z.object({
+  count: z.number(),
+  items: z.array(hotTopicSchema),
+});
+
+export const aihotVersionSchema = z.object({
+  apiVersion: z.string().nullish(),
+  skillVersion: z.string().nullish(),
+  updatedAt: z.string().nullish(),
+  changelogUrl: z.string().url().nullish(),
+  recentChanges: z.array(z.string()).default([]),
 });
