@@ -8,6 +8,11 @@ export const aihotCategorySchema = z.enum([
   "tip",
 ]);
 
+const attributionSchema = z.object({
+  source: z.string(),
+  canonical: z.string().url(),
+});
+
 const itemSchema = z.object({
   id: z.string(),
   title: z.string(),
@@ -20,6 +25,7 @@ const itemSchema = z.object({
   category: aihotCategorySchema.nullish(),
   score: z.number().nullish(),
   selected: z.boolean().nullish(),
+  attribution: attributionSchema.nullish(),
 });
 
 export const itemsResponseSchema = z.object({
@@ -34,6 +40,7 @@ const dailyItemSchema = z.object({
   summary: z.string().nullish(),
   sourceUrl: z.string().url(),
   sourceName: z.string().nullish(),
+  attribution: attributionSchema.nullish(),
 });
 
 const dailyFlashSchema = z.object({
@@ -42,6 +49,7 @@ const dailyFlashSchema = z.object({
   sourceUrl: z.string().url(),
   publishedAt: z.string().nullish(),
   permalink: z.string().url().nullish(),
+  attribution: attributionSchema.nullish(),
 });
 
 const dailySectionSchema = z.object({
@@ -51,6 +59,7 @@ const dailySectionSchema = z.object({
 
 export const dailyResponseSchema = z.object({
   date: z.string(),
+  attribution: attributionSchema.nullish(),
   generatedAt: z.string().nullish(),
   windowStart: z.string().nullish(),
   windowEnd: z.string().nullish(),
@@ -69,6 +78,7 @@ export const dailyResponseSchema = z.object({
 
 const dailyIndexItemSchema = z.object({
   date: z.string(),
+  attribution: attributionSchema.nullish(),
   generatedAt: z.string().nullish(),
   leadTitle: z.string().nullish(),
   leadParagraph: z.string().nullish(),
@@ -101,4 +111,10 @@ export const aihotVersionSchema = z.object({
   updatedAt: z.string().nullish(),
   changelogUrl: z.string().url().nullish(),
   recentChanges: z.array(z.string()).default([]),
+});
+
+export const aihotFingerprintSchema = z.object({
+  selected: z.string(),
+  all: z.string(),
+  docs: z.string().nullish(),
 });

@@ -3,6 +3,7 @@ import dailyFixture from "./__fixtures__/daily.json";
 import dailiesFixture from "./__fixtures__/dailies.json";
 import itemsFixture from "./__fixtures__/items.json";
 import {
+  normalizeAihotFingerprint,
   normalizeDailyIndex,
   normalizeDailyReport,
   normalizeItemsResponse,
@@ -37,6 +38,10 @@ describe("AI HOT normalizers", () => {
             permalink: "https://aihot.virxact.com/items/cmpurl8qd009dsl0zyghfa9kw",
             score: 91.5,
             selected: true,
+            attribution: {
+              source: "AI HOT",
+              canonical: "https://aihot.virxact.com/items/cmpurl8qd009dsl0zyghfa9kw",
+            },
           },
         ],
       },
@@ -47,6 +52,10 @@ describe("AI HOT normalizers", () => {
       permalink: "https://aihot.virxact.com/items/cmpurl8qd009dsl0zyghfa9kw",
       score: 91.5,
       selected: true,
+      attribution: {
+        source: "AI HOT",
+        canonical: "https://aihot.virxact.com/items/cmpurl8qd009dsl0zyghfa9kw",
+      },
     });
   });
 
@@ -95,6 +104,24 @@ describe("AI HOT normalizers", () => {
       sourceDate: "2026-06-01",
       localDate: "2026-05-31",
       leadTitle: "OpenAI发布生物防御AI工具Rosalind",
+    });
+  });
+
+  it("normalizes the lightweight API fingerprint", () => {
+    const result = normalizeAihotFingerprint(
+      {
+        selected: "sel-2026-07-06",
+        all: "all-2026-07-06",
+        docs: "docs-1.3.1",
+      },
+      fetchedAt,
+    );
+
+    expect(result).toMatchObject({
+      selected: "sel-2026-07-06",
+      all: "all-2026-07-06",
+      docs: "docs-1.3.1",
+      fetchedAt,
     });
   });
 });

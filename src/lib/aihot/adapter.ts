@@ -1,5 +1,6 @@
 import { ZodError } from "zod";
 import {
+  normalizeAihotFingerprint,
   normalizeAihotVersion,
   normalizeDailyIndex,
   normalizeDailyReport,
@@ -9,6 +10,7 @@ import {
 import type {
   AdapterResult,
   AihotError,
+  NormalizedAihotFingerprint,
   NormalizedAihotVersion,
   NormalizedDailyIndex,
   NormalizedDailyReport,
@@ -116,6 +118,16 @@ export async function fetchAihotVersion(
     "/api/public/version",
     normalizeAihotVersion,
     options,
+  );
+}
+
+export async function fetchAihotFingerprint(
+  options: FetchOptions = {},
+): Promise<AdapterResult<NormalizedAihotFingerprint>> {
+  return fetchAndNormalize(
+    "/api/public/fingerprint",
+    normalizeAihotFingerprint,
+    { revalidate: 60, ...options },
   );
 }
 

@@ -1,5 +1,6 @@
 import { APP_TIMEZONE, getLocalDateKey } from "@/lib/app-time";
 import {
+  aihotFingerprintSchema,
   aihotVersionSchema,
   dailyResponseSchema,
   dailiesResponseSchema,
@@ -7,12 +8,24 @@ import {
   itemsResponseSchema,
 } from "./schemas";
 import type {
+  AihotAttribution,
+  NormalizedAihotFingerprint,
   NormalizedAihotVersion,
   NormalizedDailyIndex,
   NormalizedDailyReport,
   NormalizedHotTopicsResponse,
   NormalizedItemsResponse,
 } from "./types";
+
+function normalizeAttribution(
+  attribution?: { source: string; canonical: string } | null,
+): AihotAttribution | undefined {
+  if (!attribution) return undefined;
+  return {
+    source: attribution.source,
+    canonical: attribution.canonical,
+  };
+}
 
 export function normalizeItemsResponse(
   input: unknown,
@@ -37,6 +50,7 @@ export function normalizeItemsResponse(
       category: item.category ?? undefined,
       score: item.score ?? undefined,
       selected: item.selected ?? undefined,
+      attribution: normalizeAttribution(item.attribution),
       raw: item,
     })),
   };
@@ -60,6 +74,7 @@ export function normalizeDailyReport(
     windowEnd: parsed.windowEnd ?? undefined,
     leadTitle,
     leadParagraph,
+    attribution: normalizeAttribution(parsed.attribution),
     fetchedAt,
     raw: parsed,
     sections: parsed.sections.map((section) => ({
@@ -69,6 +84,7 @@ export function normalizeDailyReport(
         summary: item.summary ?? undefined,
         sourceName: item.sourceName ?? undefined,
         sourceUrl: item.sourceUrl,
+        attribution: normalizeAttribution(item.attribution),
         raw: item,
       })),
     })),
@@ -78,6 +94,7 @@ export function normalizeDailyReport(
       sourceUrl: flash.sourceUrl,
       publishedAt: flash.publishedAt ?? undefined,
       permalink: flash.permalink ?? undefined,
+      attribution: normalizeAttribution(flash.attribution),
       raw: flash,
     })),
   };
@@ -98,6 +115,7 @@ export function normalizeDailyIndex(
       generatedAt: item.generatedAt ?? undefined,
       leadTitle: item.leadTitle ?? undefined,
       leadParagraph: item.leadParagraph ?? undefined,
+      attribution: normalizeAttribution(item.attribution),
     })),
   };
 }
@@ -137,6 +155,21 @@ export function normalizeAihotVersion(
     updatedAt: parsed.updatedAt ?? undefined,
     changelogUrl: parsed.changelogUrl ?? undefined,
     recentChanges: parsed.recentChanges,
+    fetchedAt,
+    raw: parsed,
+  };
+}
+
+export function normalizeAihotFingerprint(
+  input: unknown,
+  fetchedAt = new Date().toISOString(),
+): NormalizedAihotFingerprint {
+  const parsed = aihotFingerprintSchema.parse(input);
+
+  return {
+    selected: parsed.selected,
+    all: parsed.all,
+    docs: parsed.docs ?? undefined,
     fetchedAt,
     raw: parsed,
   };

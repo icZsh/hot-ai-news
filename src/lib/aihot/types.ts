@@ -5,6 +5,11 @@ export type AihotCategory =
   | "paper"
   | "tip";
 
+export type AihotAttribution = {
+  source: string;
+  canonical: string;
+};
+
 export type NormalizedItem = {
   id: string;
   title: string;
@@ -17,6 +22,7 @@ export type NormalizedItem = {
   category?: AihotCategory;
   score?: number;
   selected?: boolean;
+  attribution?: AihotAttribution;
   raw?: unknown;
 };
 
@@ -33,6 +39,7 @@ export type NormalizedDailyItem = {
   summary?: string;
   sourceName?: string;
   sourceUrl: string;
+  attribution?: AihotAttribution;
   raw?: unknown;
 };
 
@@ -42,6 +49,7 @@ export type NormalizedDailyFlash = {
   sourceUrl: string;
   publishedAt?: string;
   permalink?: string;
+  attribution?: AihotAttribution;
   raw?: unknown;
 };
 
@@ -59,6 +67,7 @@ export type NormalizedDailyReport = {
   windowEnd?: string;
   leadTitle?: string;
   leadParagraph?: string;
+  attribution?: AihotAttribution;
   sections: NormalizedDailySection[];
   flashes: NormalizedDailyFlash[];
   fetchedAt: string;
@@ -71,6 +80,7 @@ export type NormalizedDailyIndexItem = {
   generatedAt?: string;
   leadTitle?: string;
   leadParagraph?: string;
+  attribution?: AihotAttribution;
 };
 
 export type NormalizedDailyIndex = {
@@ -103,6 +113,14 @@ export type NormalizedAihotVersion = {
   updatedAt?: string;
   changelogUrl?: string;
   recentChanges: string[];
+  fetchedAt: string;
+  raw?: unknown;
+};
+
+export type NormalizedAihotFingerprint = {
+  selected: string;
+  all: string;
+  docs?: string;
   fetchedAt: string;
   raw?: unknown;
 };

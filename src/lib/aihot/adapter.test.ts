@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  fetchAihotFingerprint,
   fetchAihotVersion,
   fetchHotTopics,
   fetchSelectedItems,
@@ -113,5 +114,26 @@ describe("AI HOT adapter", () => {
     });
     const requestedUrl = new URL(String(vi.mocked(fetchMock).mock.calls[0][0]));
     expect(requestedUrl.pathname).toBe("/api/public/version");
+  });
+
+  it("fetches the lightweight API fingerprint", async () => {
+    const fetchMock = mockJsonResponse({
+      selected: "sel-2026-07-06",
+      all: "all-2026-07-06",
+      docs: "docs-1.3.1",
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await fetchAihotFingerprint();
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error(result.error.message);
+    expect(result.data).toMatchObject({
+      selected: "sel-2026-07-06",
+      all: "all-2026-07-06",
+      docs: "docs-1.3.1",
+    });
+    const requestedUrl = new URL(String(vi.mocked(fetchMock).mock.calls[0][0]));
+    expect(requestedUrl.pathname).toBe("/api/public/fingerprint");
   });
 });
