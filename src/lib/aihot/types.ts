@@ -39,6 +39,7 @@ export type NormalizedDailyItem = {
   summary?: string;
   sourceName?: string;
   sourceUrl: string;
+  permalink?: string;
   attribution?: AihotAttribution;
   raw?: unknown;
 };

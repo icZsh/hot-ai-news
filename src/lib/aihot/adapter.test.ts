@@ -58,6 +58,12 @@ describe("AI HOT adapter", () => {
     expect(requestedUrl.searchParams.get("q")).toBe("Anthropic Claude");
     expect(requestedUrl.searchParams.get("since")).toBe("2026-05-30T00:00:00.000Z");
     expect(requestedUrl.searchParams.get("take")).toBe("10");
+
+    const requestInit = vi.mocked(fetchMock).mock.calls[0][1] as RequestInit;
+    const headers = requestInit.headers as Record<string, string>;
+    expect(headers.Accept).toBe("application/json");
+    expect(headers["User-Agent"]).toMatch(/^hot-ai-news\/0\.1\.0 /);
+    expect(headers["User-Agent"]).not.toMatch(/Mozilla|Chrome|Safari/);
   });
 
   it("fetches and normalizes hot topics", async () => {

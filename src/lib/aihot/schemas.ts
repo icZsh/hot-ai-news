@@ -40,6 +40,7 @@ const dailyItemSchema = z.object({
   summary: z.string().nullish(),
   sourceUrl: z.string().url(),
   sourceName: z.string().nullish(),
+  permalink: z.string().url().nullish(),
   attribution: attributionSchema.nullish(),
 });
 

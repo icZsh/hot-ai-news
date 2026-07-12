@@ -96,6 +96,30 @@ describe("AI HOT normalizers", () => {
     });
   });
 
+  it("preserves daily item permalinks from the public OpenAPI contract", () => {
+    const result = normalizeDailyReport(
+      {
+        ...dailyFixture,
+        sections: [
+          {
+            ...dailyFixture.sections[0],
+            items: [
+              {
+                ...dailyFixture.sections[0].items[0],
+                permalink: "https://aihot.virxact.com/items/cmpurl8qd009dsl0zyghfa9kw",
+              },
+            ],
+          },
+        ],
+      },
+      fetchedAt,
+    );
+
+    expect(result.sections[0].items[0]).toMatchObject({
+      permalink: "https://aihot.virxact.com/items/cmpurl8qd009dsl0zyghfa9kw",
+    });
+  });
+
   it("normalizes daily index with local dates", () => {
     const result = normalizeDailyIndex(dailiesFixture, fetchedAt);
 

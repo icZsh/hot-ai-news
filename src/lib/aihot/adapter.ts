@@ -20,7 +20,7 @@ import type {
 
 const DEFAULT_BASE_URL = "https://aihot.virxact.com";
 const DEFAULT_USER_AGENT =
-  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
+  "hot-ai-news/0.1.0 (Hermes local AI News workbench; +https://github.com/icZsh/hot-ai-news)";
 
 type FetchOptions = {
   revalidate?: number;

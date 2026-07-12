@@ -84,6 +84,7 @@ export function normalizeDailyReport(
         summary: item.summary ?? undefined,
         sourceName: item.sourceName ?? undefined,
         sourceUrl: item.sourceUrl,
+        permalink: item.permalink ?? undefined,
         attribution: normalizeAttribution(item.attribution),
         raw: item,
       })),
