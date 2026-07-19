@@ -77,6 +77,7 @@ describe("AI HOT adapter", () => {
           permalink: "https://aihot.virxact.com/hot/topic-1",
           source: "AI HOT",
           sourceCount: 3,
+          signalCount: 5,
           sourceNames: ["Anthropic", "Hacker News"],
           latestAt: "2026-06-01T02:00:00.000Z",
         },
@@ -92,6 +93,7 @@ describe("AI HOT adapter", () => {
       id: "topic-1",
       title: "Claude Code",
       sourceCount: 3,
+      signalCount: 5,
       sourceNames: ["Anthropic", "Hacker News"],
       permalink: "https://aihot.virxact.com/hot/topic-1",
     });

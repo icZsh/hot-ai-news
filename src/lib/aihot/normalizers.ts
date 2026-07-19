@@ -137,6 +137,7 @@ export function normalizeHotTopicsResponse(
       permalink: item.permalink,
       sourceName: item.source,
       sourceCount: item.sourceCount,
+      signalCount: item.signalCount,
       sourceNames: item.sourceNames,
       latestAt: item.latestAt,
       raw: item,

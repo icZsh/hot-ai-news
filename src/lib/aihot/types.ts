@@ -97,6 +97,7 @@ export type NormalizedHotTopic = {
   permalink: string;
   sourceName: string;
   sourceCount: number;
+  signalCount: number;
   sourceNames: string[];
   latestAt: string;
   raw?: unknown;

@@ -97,6 +97,7 @@ const hotTopicSchema = z.object({
   permalink: z.string().url(),
   source: z.string(),
   sourceCount: z.number(),
+  signalCount: z.number(),
   sourceNames: z.array(z.string()).default([]),
   latestAt: z.string(),
 });
