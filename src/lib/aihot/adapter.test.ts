@@ -1,25 +1,60 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  fetchAihotFingerprint,
-  fetchAihotVersion,
+  fetchDailyBySourceDate,
+  fetchDailyIndex,
   fetchHotTopics,
+  fetchLatestDaily,
   fetchSelectedItems,
 } from "./adapter";
 
 const itemListPayload = {
-  count: 1,
-  hasNext: false,
-  nextCursor: null,
+  schemaVersion: 1,
+  query: {
+    mode: "selected",
+    category: null,
+    q: "Anthropic Claude",
+    window: "24h",
+    by: "timeline",
+    ordering: "timelineDesc",
+  },
   items: [
     {
       id: "item-1",
       title: "OpenAI 发布新模型",
-      url: "https://example.com/item-1",
-      permalink: "https://aihot.virxact.com/items/item-1",
-      source: "AI HOT",
+      originalTitle: "OpenAI releases a new model",
+      summary: "摘要",
+      source: { name: "AI HOT" },
+      links: {
+        aihot: "https://aihot.virxact.com/items/item-1",
+        original: "https://example.com/item-1",
+      },
+      publishedAt: "2026-07-25T01:00:00.000Z",
+      discoveredAt: "2026-07-25T01:05:00.000Z",
+      category: "ai-models",
+      score: 91,
       selected: true,
+      attribution: {
+        name: "AI HOT",
+        url: "https://aihot.virxact.com/items/item-1",
+      },
     },
   ],
+  page: { count: 1, hasMore: false, nextCursor: null },
+};
+
+const dailyReport = {
+  date: "2026-07-25",
+  generatedAt: "2026-07-25T00:00:00.000Z",
+  windowStart: "2026-07-24T00:00:00.000Z",
+  windowEnd: "2026-07-25T00:00:00.000Z",
+  links: { aihot: "https://aihot.virxact.com/daily/2026-07-25" },
+  attribution: {
+    name: "AI HOT",
+    url: "https://aihot.virxact.com/daily/2026-07-25",
+  },
+  lead: { title: "今日重点", leadParagraph: "重点摘要" },
+  sections: [],
+  flashes: [],
 };
 
 function mockJsonResponse(payload: unknown) {
@@ -29,10 +64,10 @@ function mockJsonResponse(payload: unknown) {
   })) as unknown as typeof fetch;
 }
 
-describe("AI HOT adapter", () => {
+describe("AI HOT v1 adapter", () => {
   beforeEach(() => {
     vi.useFakeTimers();
-    vi.setSystemTime(new Date("2026-06-01T00:00:00.000Z"));
+    vi.setSystemTime(new Date("2026-07-25T00:00:00.000Z"));
   });
 
   afterEach(() => {
@@ -40,46 +75,86 @@ describe("AI HOT adapter", () => {
     vi.unstubAllGlobals();
   });
 
-  it("sends keyword and since filters when fetching selected items", async () => {
+  it("uses v1 item query names and endpoint", async () => {
     const fetchMock = mockJsonResponse(itemListPayload);
     vi.stubGlobal("fetch", fetchMock);
 
     const result = await fetchSelectedItems({
       mode: "selected",
       q: "Anthropic Claude",
-      since: "2026-05-30T00:00:00.000Z",
+      window: "24h",
+      by: "timeline",
       take: 10,
     });
 
-    expect(result.ok).toBe(true);
     const requestedUrl = new URL(String(vi.mocked(fetchMock).mock.calls[0][0]));
-    expect(requestedUrl.pathname).toBe("/api/public/items");
+    expect(requestedUrl.pathname).toBe("/api/v1/items");
     expect(requestedUrl.searchParams.get("mode")).toBe("selected");
     expect(requestedUrl.searchParams.get("q")).toBe("Anthropic Claude");
-    expect(requestedUrl.searchParams.get("since")).toBe("2026-05-30T00:00:00.000Z");
-    expect(requestedUrl.searchParams.get("take")).toBe("10");
-
-    const requestInit = vi.mocked(fetchMock).mock.calls[0][1] as RequestInit;
-    const headers = requestInit.headers as Record<string, string>;
-    expect(headers.Accept).toBe("application/json");
-    expect(headers["User-Agent"]).toMatch(/^hot-ai-news\/0\.1\.0 /);
-    expect(headers["User-Agent"]).not.toMatch(/Mozilla|Chrome|Safari/);
+    expect(requestedUrl.searchParams.get("window")).toBe("24h");
+    expect(requestedUrl.searchParams.get("by")).toBe("timeline");
+    expect(requestedUrl.searchParams.get("limit")).toBe("10");
+    expect(requestedUrl.searchParams.has("take")).toBe(false);
+    expect(requestedUrl.searchParams.has("since")).toBe(false);
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error(result.error.message);
+    expect(result.data.items[0]).toMatchObject({
+      titleEn: "OpenAI releases a new model",
+      sourceName: "AI HOT",
+      url: "https://example.com/item-1",
+      permalink: "https://aihot.virxact.com/items/item-1",
+    });
   });
 
-  it("fetches and normalizes hot topics", async () => {
+  it("uses v1 daily endpoints and unwraps reports", async () => {
+    const fetchMock = mockJsonResponse({ schemaVersion: 1, report: dailyReport });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const latest = await fetchLatestDaily();
+    const byDate = await fetchDailyBySourceDate("2026-07-25");
+
+    expect(new URL(String(vi.mocked(fetchMock).mock.calls[0][0])).pathname).toBe(
+      "/api/v1/dailies/latest",
+    );
+    expect(new URL(String(vi.mocked(fetchMock).mock.calls[1][0])).pathname).toBe(
+      "/api/v1/dailies/2026-07-25",
+    );
+    expect(latest.ok).toBe(true);
+    expect(byDate.ok).toBe(true);
+    if (!latest.ok) throw new Error(latest.error.message);
+    expect(latest.data.leadParagraph).toBe("重点摘要");
+  });
+
+  it("uses v1 daily index endpoint and limit parameter", async () => {
+    const fetchMock = mockJsonResponse({ schemaVersion: 1, count: 0, items: [] });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await fetchDailyIndex();
+
+    const requestedUrl = new URL(String(vi.mocked(fetchMock).mock.calls[0][0]));
+    expect(requestedUrl.pathname).toBe("/api/v1/dailies");
+    expect(requestedUrl.searchParams.get("limit")).toBe("10");
+    expect(requestedUrl.searchParams.has("take")).toBe(false);
+    expect(result.ok).toBe(true);
+  });
+
+  it("fetches and normalizes v1 hot topics", async () => {
     const fetchMock = mockJsonResponse({
+      schemaVersion: 1,
       count: 1,
       items: [
         {
           id: "topic-1",
           title: "Claude Code",
-          url: "https://example.com/topic-1",
-          permalink: "https://aihot.virxact.com/hot/topic-1",
-          source: "AI HOT",
+          source: { name: "Anthropic" },
+          links: {
+            aihot: "https://aihot.virxact.com/items/topic-1",
+            original: "https://example.com/topic-1",
+          },
           sourceCount: 3,
           signalCount: 5,
           sourceNames: ["Anthropic", "Hacker News"],
-          latestAt: "2026-06-01T02:00:00.000Z",
+          latestAt: "2026-07-25T02:00:00.000Z",
         },
       ],
     });
@@ -92,56 +167,13 @@ describe("AI HOT adapter", () => {
     expect(result.data.items[0]).toMatchObject({
       id: "topic-1",
       title: "Claude Code",
+      sourceName: "Anthropic",
       sourceCount: 3,
       signalCount: 5,
-      sourceNames: ["Anthropic", "Hacker News"],
-      permalink: "https://aihot.virxact.com/hot/topic-1",
+      url: "https://example.com/topic-1",
+      permalink: "https://aihot.virxact.com/items/topic-1",
     });
     const requestedUrl = new URL(String(vi.mocked(fetchMock).mock.calls[0][0]));
-    expect(requestedUrl.pathname).toBe("/api/public/hot-topics");
-  });
-
-  it("fetches and normalizes API version metadata", async () => {
-    const fetchMock = mockJsonResponse({
-      apiVersion: "1.1.0",
-      skillVersion: "1.0.0",
-      updatedAt: "2026-06-01T02:00:00.000Z",
-      changelogUrl: "https://aihot.virxact.com/changelog",
-      recentChanges: ["Added hot topics"],
-    });
-    vi.stubGlobal("fetch", fetchMock);
-
-    const result = await fetchAihotVersion();
-
-    expect(result.ok).toBe(true);
-    if (!result.ok) throw new Error(result.error.message);
-    expect(result.data).toMatchObject({
-      apiVersion: "1.1.0",
-      skillVersion: "1.0.0",
-      recentChanges: ["Added hot topics"],
-    });
-    const requestedUrl = new URL(String(vi.mocked(fetchMock).mock.calls[0][0]));
-    expect(requestedUrl.pathname).toBe("/api/public/version");
-  });
-
-  it("fetches the lightweight API fingerprint", async () => {
-    const fetchMock = mockJsonResponse({
-      selected: "sel-2026-07-06",
-      all: "all-2026-07-06",
-      docs: "docs-1.3.1",
-    });
-    vi.stubGlobal("fetch", fetchMock);
-
-    const result = await fetchAihotFingerprint();
-
-    expect(result.ok).toBe(true);
-    if (!result.ok) throw new Error(result.error.message);
-    expect(result.data).toMatchObject({
-      selected: "sel-2026-07-06",
-      all: "all-2026-07-06",
-      docs: "docs-1.3.1",
-    });
-    const requestedUrl = new URL(String(vi.mocked(fetchMock).mock.calls[0][0]));
-    expect(requestedUrl.pathname).toBe("/api/public/fingerprint");
+    expect(requestedUrl.pathname).toBe("/api/v1/hot-topics");
   });
 });

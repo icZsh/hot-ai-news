@@ -8,12 +8,17 @@ export const aihotCategorySchema = z.enum([
   "tip",
 ]);
 
-const attributionSchema = z.object({
+const legacyAttributionSchema = z.object({
   source: z.string(),
   canonical: z.string().url(),
 });
 
-const itemSchema = z.object({
+const v1AttributionSchema = z.object({
+  name: z.string(),
+  url: z.string().url(),
+});
+
+const legacyItemSchema = z.object({
   id: z.string(),
   title: z.string(),
   title_en: z.string().nullish(),
@@ -25,42 +30,84 @@ const itemSchema = z.object({
   category: aihotCategorySchema.nullish(),
   score: z.number().nullish(),
   selected: z.boolean().nullish(),
-  attribution: attributionSchema.nullish(),
+  attribution: legacyAttributionSchema.nullish(),
 });
 
 export const itemsResponseSchema = z.object({
   count: z.number(),
   hasNext: z.boolean().default(false),
   nextCursor: z.string().nullable().optional(),
-  items: z.array(itemSchema),
+  items: z.array(legacyItemSchema),
 });
 
-const dailyItemSchema = z.object({
+const v1SourceSchema = z.object({
+  name: z.string(),
+});
+
+const v1LinksSchema = z.object({
+  aihot: z.string().url().nullable(),
+  original: z.string().url(),
+});
+
+const v1ItemSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  originalTitle: z.string().nullish(),
+  summary: z.string().nullish(),
+  source: v1SourceSchema,
+  links: v1LinksSchema.extend({ aihot: z.string().url() }),
+  publishedAt: z.string().nullish(),
+  discoveredAt: z.string(),
+  category: z.string().nullish(),
+  score: z.number().nullish(),
+  selected: z.boolean(),
+  attribution: v1AttributionSchema.nullish(),
+});
+
+export const v1ItemsResponseSchema = z.object({
+  schemaVersion: z.number(),
+  query: z.object({
+    mode: z.enum(["selected", "all"]),
+    category: z.string().nullable(),
+    q: z.string().nullable(),
+    window: z.enum(["24h", "7d"]),
+    by: z.enum(["timeline", "published"]),
+    ordering: z.string(),
+  }),
+  items: z.array(v1ItemSchema),
+  page: z.object({
+    count: z.number(),
+    hasMore: z.boolean(),
+    nextCursor: z.string().nullable(),
+  }),
+});
+
+const legacyDailyItemSchema = z.object({
   title: z.string(),
   summary: z.string().nullish(),
   sourceUrl: z.string().url(),
   sourceName: z.string().nullish(),
   permalink: z.string().url().nullish(),
-  attribution: attributionSchema.nullish(),
+  attribution: legacyAttributionSchema.nullish(),
 });
 
-const dailyFlashSchema = z.object({
+const legacyDailyFlashSchema = z.object({
   title: z.string(),
   sourceName: z.string().nullish(),
   sourceUrl: z.string().url(),
   publishedAt: z.string().nullish(),
   permalink: z.string().url().nullish(),
-  attribution: attributionSchema.nullish(),
+  attribution: legacyAttributionSchema.nullish(),
 });
 
-const dailySectionSchema = z.object({
+const legacyDailySectionSchema = z.object({
   label: z.string(),
-  items: z.array(dailyItemSchema),
+  items: z.array(legacyDailyItemSchema),
 });
 
 export const dailyResponseSchema = z.object({
   date: z.string(),
-  attribution: attributionSchema.nullish(),
+  attribution: legacyAttributionSchema.nullish(),
   generatedAt: z.string().nullish(),
   windowStart: z.string().nullish(),
   windowEnd: z.string().nullish(),
@@ -73,13 +120,59 @@ export const dailyResponseSchema = z.object({
     .optional(),
   leadTitle: z.string().nullish(),
   leadParagraph: z.string().nullish(),
-  sections: z.array(dailySectionSchema).default([]),
-  flashes: z.array(dailyFlashSchema).default([]),
+  sections: z.array(legacyDailySectionSchema).default([]),
+  flashes: z.array(legacyDailyFlashSchema).default([]),
 });
 
-const dailyIndexItemSchema = z.object({
+const v1DailyItemSchema = z.object({
+  title: z.string(),
+  summary: z.string().nullish(),
+  source: v1SourceSchema,
+  links: v1LinksSchema,
+  attribution: v1AttributionSchema.nullish(),
+});
+
+const v1DailyFlashSchema = z.object({
+  title: z.string(),
+  source: v1SourceSchema,
+  links: v1LinksSchema,
+  publishedAt: z.string().nullish(),
+  attribution: v1AttributionSchema.nullish(),
+});
+
+const v1DailyReportSchema = z.object({
   date: z.string(),
-  attribution: attributionSchema.nullish(),
+  generatedAt: z.string().nullish(),
+  windowStart: z.string().nullish(),
+  windowEnd: z.string().nullish(),
+  links: z.object({ aihot: z.string().url() }),
+  attribution: v1AttributionSchema.nullish(),
+  lead: z
+    .object({
+      title: z.string().nullish(),
+      leadParagraph: z.string().nullish(),
+    })
+    .nullable()
+    .optional(),
+  sections: z
+    .array(
+      z.object({
+        label: z.string(),
+        items: z.array(v1DailyItemSchema),
+      }),
+    )
+    .default([]),
+  flashes: z.array(v1DailyFlashSchema).default([]),
+});
+
+export const v1DailyResponseSchema = z.object({
+  schemaVersion: z.number(),
+  report: v1DailyReportSchema,
+});
+
+const legacyDailyIndexItemSchema = z.object({
+  date: z.string(),
+  attribution: legacyAttributionSchema.nullish(),
   generatedAt: z.string().nullish(),
   leadTitle: z.string().nullish(),
   leadParagraph: z.string().nullish(),
@@ -87,10 +180,25 @@ const dailyIndexItemSchema = z.object({
 
 export const dailiesResponseSchema = z.object({
   count: z.number(),
-  items: z.array(dailyIndexItemSchema),
+  items: z.array(legacyDailyIndexItemSchema),
 });
 
-const hotTopicSchema = z.object({
+const v1DailyIndexItemSchema = z.object({
+  date: z.string(),
+  attribution: v1AttributionSchema.nullish(),
+  generatedAt: z.string().nullish(),
+  leadTitle: z.string().nullish(),
+  leadParagraph: z.string().nullish(),
+  links: z.object({ aihot: z.string().url() }),
+});
+
+export const v1DailiesResponseSchema = z.object({
+  schemaVersion: z.number(),
+  count: z.number(),
+  items: z.array(v1DailyIndexItemSchema),
+});
+
+const legacyHotTopicSchema = z.object({
   id: z.string(),
   title: z.string(),
   url: z.string().url(),
@@ -104,7 +212,24 @@ const hotTopicSchema = z.object({
 
 export const hotTopicsResponseSchema = z.object({
   count: z.number(),
-  items: z.array(hotTopicSchema),
+  items: z.array(legacyHotTopicSchema),
+});
+
+const v1HotTopicSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  source: v1SourceSchema,
+  links: v1LinksSchema.extend({ aihot: z.string().url() }),
+  sourceCount: z.number(),
+  signalCount: z.number(),
+  sourceNames: z.array(z.string()).default([]),
+  latestAt: z.string(),
+});
+
+export const v1HotTopicsResponseSchema = z.object({
+  schemaVersion: z.number(),
+  count: z.number(),
+  items: z.array(v1HotTopicSchema),
 });
 
 export const aihotVersionSchema = z.object({
