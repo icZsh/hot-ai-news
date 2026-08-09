@@ -236,6 +236,7 @@ export function normalizeHotTopicsResponse(
       count: v1.data.count,
       fetchedAt,
       items: v1.data.items.map((item) => ({
+        rank: item.rank,
         id: item.id,
         title: item.title,
         url: item.links.original,

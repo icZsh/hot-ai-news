@@ -91,6 +91,7 @@ export type NormalizedDailyIndex = {
 };
 
 export type NormalizedHotTopic = {
+  rank?: number;
   id: string;
   title: string;
   url: string;

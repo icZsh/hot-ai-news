@@ -17,6 +17,7 @@ All requests are anonymous, read-only JSON GETs.
   - Response: `{schemaVersion, count, items}`.
 - `GET /api/v1/hot-topics`
   - Response: `{schemaVersion, count, items}`.
+  - Each item carries one-based `rank` (1-10); preserve the API order and do not infer heat from `sourceCount` or `signalCount`.
 
 ## Field mapping
 

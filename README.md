@@ -4,6 +4,8 @@ A personal AI news radar built with Next.js, AI HOT, and optional Postgres persi
 
 Hot AI News starts as a lightweight reader for the public AI HOT API. When a Postgres `DATABASE_URL` is configured, it also keeps a local cache, bookmarks, notes, search data, and weekly review material.
 
+AIHOT's anonymous API access is not a blanket data license. Personal non-commercial, public-interest non-commercial, and internal organizational use are free; externally sold products, client deliverables, proxy APIs, data resale, public mirrors, or bulk public redistribution require prior written authorization under [AIHOT's public-use terms](https://aihot.virxact.com/terms).
+
 ## Features
 
 - AI HOT selected items and daily reports

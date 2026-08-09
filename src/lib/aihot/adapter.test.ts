@@ -144,6 +144,7 @@ describe("AI HOT v1 adapter", () => {
       count: 1,
       items: [
         {
+          rank: 1,
           id: "topic-1",
           title: "Claude Code",
           source: { name: "Anthropic" },
@@ -165,6 +166,7 @@ describe("AI HOT v1 adapter", () => {
     expect(result.ok).toBe(true);
     if (!result.ok) throw new Error(result.error.message);
     expect(result.data.items[0]).toMatchObject({
+      rank: 1,
       id: "topic-1",
       title: "Claude Code",
       sourceName: "Anthropic",

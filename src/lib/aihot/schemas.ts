@@ -216,6 +216,7 @@ export const hotTopicsResponseSchema = z.object({
 });
 
 const v1HotTopicSchema = z.object({
+  rank: z.number().int().min(1).max(10),
   id: z.string(),
   title: z.string(),
   source: v1SourceSchema,

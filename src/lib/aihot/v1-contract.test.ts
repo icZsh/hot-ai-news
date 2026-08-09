@@ -157,6 +157,7 @@ describe("AI HOT v1 wire normalization", () => {
         count: 1,
         items: [
           {
+            rank: 1,
             id: "topic-1",
             title: "热点",
             source: { name: "Example" },
@@ -183,6 +184,7 @@ describe("AI HOT v1 wire normalization", () => {
       },
     });
     expect(topics.items[0]).toMatchObject({
+      rank: 1,
       sourceName: "Example",
       url: "https://example.com/topic-1",
       permalink: "https://aihot.virxact.com/items/topic-1",
