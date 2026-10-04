@@ -88,6 +88,7 @@ describe("AI HOT v1 adapter", () => {
     });
 
     const requestedUrl = new URL(String(vi.mocked(fetchMock).mock.calls[0][0]));
+    expect(requestedUrl.origin).toBe("https://aihot.news");
     expect(requestedUrl.pathname).toBe("/api/v1/items");
     expect(requestedUrl.searchParams.get("mode")).toBe("selected");
     expect(requestedUrl.searchParams.get("q")).toBe("Anthropic Claude");

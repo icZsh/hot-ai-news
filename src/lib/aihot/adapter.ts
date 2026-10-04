@@ -13,7 +13,7 @@ import type {
   NormalizedItemsResponse,
 } from "./types";
 
-const DEFAULT_BASE_URL = "https://aihot.virxact.com";
+const DEFAULT_BASE_URL = "https://aihot.news";
 const DEFAULT_USER_AGENT =
   "hot-ai-news/0.1.0 (Hermes local AI News workbench; +https://github.com/icZsh/hot-ai-news)";
 
