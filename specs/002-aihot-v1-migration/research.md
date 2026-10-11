@@ -27,3 +27,10 @@ The legacy OpenAPI changed materially. It now announces formal retirement of the
 ## Scope decision
 
 Keep normalized local types stable to avoid database/UI churn. Do not add full snapshot/changes mirroring in this maintenance pass; it is a separate capability with state-machine semantics.
+
+## 2026-10-10 canonical-host follow-up
+
+- Current OpenAPI SHA-256: `19b4b529e24ec52c2cd9be6cd7cfc663a9c0182020b2ab6ad816eff59fabaa21`.
+- The OpenAPI document version is `2.0.0`, but the existing `/api/v1` paths and live response `schemaVersion: 1` remain backward compatible.
+- The canonical server is now `https://aihot.news`; `https://aihot.virxact.com` becomes a redirect-only compatibility host after 2026-10-31 (Beijing time).
+- Live items, daily, daily-index, and hot-topic responses retained the fields consumed by the existing Zod normalizers, so only local configuration/documentation defaults required a change.

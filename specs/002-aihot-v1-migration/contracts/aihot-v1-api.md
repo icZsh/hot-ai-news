@@ -1,6 +1,8 @@
 # Contract: AI HOT Stable v1 API
 
-Base URL: `https://aihot.virxact.com`
+Base URL: `https://aihot.news`
+
+The former `https://aihot.virxact.com` host is a compatibility surface and is scheduled to redirect to the same paths after 2026-10-31 (Beijing time).
 
 All requests are anonymous, read-only JSON GETs.
 

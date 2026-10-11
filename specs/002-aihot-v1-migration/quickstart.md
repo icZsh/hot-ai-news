@@ -11,5 +11,5 @@ npm run build
 Live smoke uses only anonymous read-only endpoints and a harmless one-item response:
 
 ```bash
-curl -fsSL 'https://aihot.virxact.com/api/v1/items?mode=selected&window=7d&limit=1'
+curl -fsSL 'https://aihot.news/api/v1/items?mode=selected&window=7d&limit=1'
 ```

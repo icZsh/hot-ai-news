@@ -178,7 +178,7 @@ docker compose up --build -d
 | Variable | Required | Description |
 | --- | --- | --- |
 | `APP_TIMEZONE` | No | Display timezone. Defaults to `America/Los_Angeles`. |
-| `AIHOT_BASE_URL` | No | AI HOT base URL. Defaults to `https://aihot.virxact.com`. |
+| `AIHOT_BASE_URL` | No | AI HOT base URL. Defaults to `https://aihot.news`. |
 | `AIHOT_USER_AGENT` | No | User agent used for server-side AI HOT requests. |
 | `DATABASE_URL` | No | Postgres connection string. Enables local persistence when set. |
 | `CRON_SECRET` | Production writes | Secret accepted by cron/write endpoints via `x-cron-secret` or bearer auth. |

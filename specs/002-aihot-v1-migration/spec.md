@@ -44,7 +44,7 @@ The workbench can fetch `/api/v1/hot-topics` and preserve the existing normalize
 
 ## Requirements
 
-- **FR-001**: Production adapter calls MUST use only `https://aihot.virxact.com/api/v1/*` AI HOT data endpoints.
+- **FR-001**: Production adapter calls MUST use only `https://aihot.news/api/v1/*` AI HOT data endpoints.
 - **FR-002**: Item query construction MUST use v1 names: `limit`, `window`, `by`, `q`, `category`, `cursor`, and `mode`.
 - **FR-003**: Existing normalized item, daily, daily-index, and hot-topic types MUST remain compatible with local services and UI.
 - **FR-004**: The adapter MUST unwrap v1 response envelopes and nested source/link objects.

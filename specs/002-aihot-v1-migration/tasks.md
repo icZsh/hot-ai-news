@@ -26,3 +26,9 @@
 - [x] T013 Run `npm run build`.
 - [x] T014 Run a harmless live v1 normalization smoke.
 - [x] T015 Commit the verified migration locally.
+
+## Phase 5: Canonical-host follow-up (2026-10-10)
+
+- [x] T016 Confirm the current OpenAPI keeps `/api/v1` paths and live response `schemaVersion: 1`.
+- [x] T017 Change local, example, Compose, and documentation defaults to `https://aihot.news`.
+- [x] T018 Re-run focused contract tests, full tests, lint, build, and live read-only endpoint smokes.

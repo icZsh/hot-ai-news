@@ -7,7 +7,7 @@ services:
       - "${HOT_AI_NEWS_PORT:-3100}:3100"
     environment:
       APP_TIMEZONE: ${APP_TIMEZONE:-America/Los_Angeles}
-      AIHOT_BASE_URL: ${AIHOT_BASE_URL:-https://aihot.virxact.com}
+      AIHOT_BASE_URL: ${AIHOT_BASE_URL:-https://aihot.news}
       AIHOT_USER_AGENT: ${AIHOT_USER_AGENT:-Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36}
       DATABASE_URL: ${DATABASE_URL:-}
       CRON_SECRET: ${CRON_SECRET:-}

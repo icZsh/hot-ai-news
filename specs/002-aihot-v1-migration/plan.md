@@ -7,7 +7,7 @@ Migrate the existing adapter at `src/lib/aihot/` to AI HOT's stable anonymous re
 ## Technical Context
 
 - Runtime: Next.js 16, TypeScript, Zod, Vitest.
-- Source contract: `https://aihot.virxact.com/openapi-v1.json`.
+- Source contract: `https://aihot.news/openapi-v1.json` (the watched legacy-host URL redirects to this canonical host).
 - Legacy contract: `https://aihot.virxact.com/openapi.yaml`, which announces shutdown on 2026-12-31.
 - Existing consumers rely on `NormalizedItemsResponse`, `NormalizedDailyReport`, `NormalizedDailyIndex`, and `NormalizedHotTopicsResponse`.
 
