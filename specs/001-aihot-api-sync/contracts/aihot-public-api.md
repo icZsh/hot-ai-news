@@ -15,7 +15,7 @@ When present, `since` and `q` are encoded as query parameters on `/api/public/it
 
 ## Hot topics
 
-`fetchHotTopics(options)` calls `/api/public/hot-topics` and returns normalized topic data.
+`fetchHotTopics(options)` calls `/api/public/hot-topics` and returns normalized topic data. The normalized shape preserves both `sourceCount` (independent sources) and `signalCount` (underlying reports/signals) from the public API.
 
 ## Version metadata
 

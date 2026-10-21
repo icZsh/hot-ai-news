@@ -4,6 +4,8 @@ A personal AI news radar built with Next.js, AI HOT, and optional Postgres persi
 
 Hot AI News starts as a lightweight reader for the public AI HOT API. When a Postgres `DATABASE_URL` is configured, it also keeps a local cache, bookmarks, notes, search data, and weekly review material.
 
+AIHOT's anonymous API access is not a blanket data license. Personal non-commercial, public-interest non-commercial, and internal organizational use are free; externally sold products, client deliverables, proxy APIs, data resale, public mirrors, or bulk public redistribution require prior written authorization under [AIHOT's public-use terms](https://aihot.news/terms).
+
 ## Features
 
 - AI HOT selected items and daily reports
@@ -176,7 +178,7 @@ docker compose up --build -d
 | Variable | Required | Description |
 | --- | --- | --- |
 | `APP_TIMEZONE` | No | Display timezone. Defaults to `America/Los_Angeles`. |
-| `AIHOT_BASE_URL` | No | AI HOT base URL. Defaults to `https://aihot.virxact.com`. |
+| `AIHOT_BASE_URL` | No | AI HOT base URL. Defaults to `https://aihot.news`. |
 | `AIHOT_USER_AGENT` | No | User agent used for server-side AI HOT requests. |
 | `DATABASE_URL` | No | Postgres connection string. Enables local persistence when set. |
 | `CRON_SECRET` | Production writes | Secret accepted by cron/write endpoints via `x-cron-secret` or bearer auth. |

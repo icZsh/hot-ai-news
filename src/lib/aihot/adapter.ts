@@ -1,6 +1,5 @@
 import { ZodError } from "zod";
 import {
-  normalizeAihotVersion,
   normalizeDailyIndex,
   normalizeDailyReport,
   normalizeHotTopicsResponse,
@@ -8,17 +7,15 @@ import {
 } from "./normalizers";
 import type {
   AdapterResult,
-  AihotError,
-  NormalizedAihotVersion,
   NormalizedDailyIndex,
   NormalizedDailyReport,
   NormalizedHotTopicsResponse,
   NormalizedItemsResponse,
 } from "./types";
 
-const DEFAULT_BASE_URL = "https://aihot.virxact.com";
+const DEFAULT_BASE_URL = "https://aihot.news";
 const DEFAULT_USER_AGENT =
-  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
+  "hot-ai-news/0.1.0 (Hermes local AI News workbench; +https://github.com/icZsh/hot-ai-news)";
 
 type FetchOptions = {
   revalidate?: number;
@@ -31,7 +28,8 @@ type ItemsOptions = FetchOptions & {
   category?: string;
   take?: number;
   cursor?: string;
-  since?: string;
+  window?: "24h" | "7d";
+  by?: "timeline" | "published";
   q?: string;
 };
 
@@ -43,7 +41,12 @@ export async function fetchSelectedItems(
 ): Promise<AdapterResult<NormalizedItemsResponse>> {
   const params = new URLSearchParams();
   params.set("mode", options.mode ?? "selected");
-  params.set("take", String(options.take ?? 80));
+  params.set("limit", String(options.take ?? 80));
+  params.set("window", options.window ?? "7d");
+
+  if (options.by) {
+    params.set("by", options.by);
+  }
 
   if (options.category && options.category !== "all") {
     params.set("category", options.category);
@@ -53,16 +56,12 @@ export async function fetchSelectedItems(
     params.set("cursor", options.cursor);
   }
 
-  if (options.since) {
-    params.set("since", options.since);
-  }
-
   if (options.q) {
     params.set("q", options.q);
   }
 
   return fetchAndNormalize(
-    `/api/public/items?${params.toString()}`,
+    `/api/v1/items?${params.toString()}`,
     normalizeItemsResponse,
     options,
   );
@@ -72,7 +71,7 @@ export async function fetchLatestDaily(
   options: FetchOptions = {},
 ): Promise<AdapterResult<NormalizedDailyReport>> {
   return fetchAndNormalize(
-    "/api/public/daily",
+    "/api/v1/dailies/latest",
     normalizeDailyReport,
     options,
   );
@@ -83,7 +82,7 @@ export async function fetchDailyBySourceDate(
   options: FetchOptions = {},
 ): Promise<AdapterResult<NormalizedDailyReport>> {
   return fetchAndNormalize(
-    `/api/public/daily/${encodeURIComponent(sourceDate)}`,
+    `/api/v1/dailies/${encodeURIComponent(sourceDate)}`,
     normalizeDailyReport,
     options,
   );
@@ -93,7 +92,7 @@ export async function fetchDailyIndex(
   options: FetchOptions = {},
 ): Promise<AdapterResult<NormalizedDailyIndex>> {
   return fetchAndNormalize(
-    "/api/public/dailies?take=10",
+    "/api/v1/dailies?limit=10",
     normalizeDailyIndex,
     options,
   );
@@ -103,18 +102,8 @@ export async function fetchHotTopics(
   options: FetchOptions = {},
 ): Promise<AdapterResult<NormalizedHotTopicsResponse>> {
   return fetchAndNormalize(
-    "/api/public/hot-topics",
+    "/api/v1/hot-topics",
     normalizeHotTopicsResponse,
-    options,
-  );
-}
-
-export async function fetchAihotVersion(
-  options: FetchOptions = {},
-): Promise<AdapterResult<NormalizedAihotVersion>> {
-  return fetchAndNormalize(
-    "/api/public/version",
-    normalizeAihotVersion,
     options,
   );
 }
@@ -193,17 +182,17 @@ function httpError(response: Response): Error & { status?: number } {
   return error;
 }
 
-function toAihotError(error: unknown): AihotError {
+function toAihotError(error: unknown) {
   if (error instanceof ZodError) {
     return {
-      code: "parse_error",
+      code: "parse_error" as const,
       message: "AI HOT 返回字段变化，暂时无法解析。",
     };
   }
 
   if (error instanceof DOMException && error.name === "TimeoutError") {
     return {
-      code: "remote_timeout",
+      code: "remote_timeout" as const,
       message: "AI HOT 响应超时，稍后再试。",
     };
   }
@@ -213,21 +202,21 @@ function toAihotError(error: unknown): AihotError {
 
     if (status >= 400 && status < 500) {
       return {
-        code: "remote_4xx",
+        code: "remote_4xx" as const,
         message: `AI HOT 暂时拒绝了请求（${status}）。`,
       };
     }
 
     if (status >= 500) {
       return {
-        code: "remote_5xx",
+        code: "remote_5xx" as const,
         message: `AI HOT 服务暂时不可用（${status}）。`,
       };
     }
   }
 
   return {
-    code: "unknown",
+    code: "unknown" as const,
     message: error instanceof Error ? error.message : "未知错误。",
   };
 }
