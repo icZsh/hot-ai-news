@@ -3,6 +3,7 @@ import type { Bookmark, ExternalItem } from "@prisma/client";
 import type { AihotCategory, NormalizedItem } from "@/lib/aihot/types";
 import { getLocalDateKey, getLocalWeekRange } from "@/lib/app-time";
 import { getPrisma, hasDatabaseUrl } from "@/lib/db";
+import { externalItemRecencyOrder } from "@/lib/services/ordering";
 import {
   bookmarkStatuses,
   getStatusLabel,
@@ -279,7 +280,7 @@ export async function searchLocalItems(query: string): Promise<BookmarkListResul
           { sourceName: { contains: q, mode: "insensitive" } },
         ],
       },
-      orderBy: [{ publishedAt: "desc" }, { fetchedAt: "desc" }],
+      orderBy: externalItemRecencyOrder,
       take: 80,
     }),
     prisma.note.findMany({
