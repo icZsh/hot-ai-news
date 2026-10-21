@@ -8,6 +8,7 @@ import type {
   NormalizedItemsResponse,
 } from "@/lib/aihot/types";
 import { hasDatabaseUrl, getPrisma } from "@/lib/db";
+import { externalItemRecencyOrder, latestFetchedAt } from "@/lib/services/ordering";
 
 type ItemsSource = "database" | "remote";
 
@@ -80,7 +81,7 @@ export async function findLocalItems(
       selected: true,
       ...(category ? { category } : {}),
     },
-    orderBy: [{ publishedAt: "desc" }, { fetchedAt: "desc" }],
+    orderBy: externalItemRecencyOrder,
     take,
   });
 
@@ -88,7 +89,7 @@ export async function findLocalItems(
     count: rows.length,
     hasNext: false,
     nextCursor: null,
-    fetchedAt: rows[0]?.fetchedAt.toISOString() ?? new Date().toISOString(),
+    fetchedAt: latestFetchedAt(rows),
     items: rows.map(mapExternalItem),
   };
 }

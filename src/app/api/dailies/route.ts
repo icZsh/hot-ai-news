@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { fetchDailyIndex } from "@/lib/aihot/adapter";
 import { hasDatabaseUrl, getPrisma } from "@/lib/db";
+import { dailyReportRecencyOrder } from "@/lib/services/ordering";
 
 export async function GET() {
   if (hasDatabaseUrl()) {
@@ -8,7 +9,7 @@ export async function GET() {
       const prisma = getPrisma();
       const reports = await prisma.dailyReport.findMany({
         where: { sourceSystem: "aihot" },
-        orderBy: [{ localDate: "desc" }, { generatedAt: "desc" }],
+        orderBy: dailyReportRecencyOrder,
         take: 30,
       });
 
