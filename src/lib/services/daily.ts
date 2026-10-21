@@ -7,6 +7,7 @@ import type {
 } from "@/lib/aihot/types";
 import { APP_TIMEZONE } from "@/lib/app-time";
 import { hasDatabaseUrl, getPrisma } from "@/lib/db";
+import { dailyReportRecencyOrder } from "@/lib/services/ordering";
 
 type DailySource = "database" | "remote";
 
@@ -92,7 +93,7 @@ export async function findLatestLocalDaily(): Promise<NormalizedDailyReport | nu
   const prisma = getPrisma();
   const report = await prisma.dailyReport.findFirst({
     where: { sourceSystem: "aihot" },
-    orderBy: [{ localDate: "desc" }, { generatedAt: "desc" }],
+    orderBy: dailyReportRecencyOrder,
     include: {
       items: {
         orderBy: { sortOrder: "asc" },
